@@ -10,12 +10,12 @@ router.get('/', (req, res) => {
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
     }
   })
-    .then(data => {
-      if(!data) {
+    .then(categories => {
+      if(!categories) {
         res.status(404).json({message: 'No categories found! Have you seeded your db?'});
         return;
       }
-      res.json(data);
+      res.json(categories);
     })
     .catch(err => {
       console.log(err);
@@ -35,12 +35,12 @@ router.get('/:id', (req, res) => {
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
     }
   })
-    .then(data => {
-      if(!data) {
+    .then(categories => {
+      if(!categories) {
         res.status(404).json({message: 'No categories found! Have you seeded your db?'});
         return;
       }
-      res.json(data);
+      res.json(categories);
     })
     .catch(err => {
       console.log(err);
@@ -53,7 +53,7 @@ router.post('/', (req, res) => {
   Category.create({
     category_name: req.body.category_name
   })
-    .then(data => res.json(data))
+    .then(categories => res.json(categories))
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
@@ -67,12 +67,12 @@ router.put('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then(data => {
-    if (!data) {
-      res.status(404).json({message: "No category matches this ID."});
+  .then(categories => {
+    if (!categories) {
+      res.status(404).json({message: "No category matches this ID. Have you seeded your db?"});
       return;
     }
-    res.json(data)
+    res.json(categories)
   })
   .catch(err => {
     console.log(err);
@@ -82,6 +82,22 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
+  Category.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(categories => {
+      if (!categories){
+        res.status(404).json({message: 'No category matches this ID. Have you seeded your db?'});
+        return;
+      }
+      res.json(categories);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
