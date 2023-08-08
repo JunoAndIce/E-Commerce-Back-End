@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   })
     .then(data => {
       if(!data) {
-        res.status(404).json({message: 'No categories found'});
+        res.status(404).json({message: 'No categories found! Have you seeded your db?'});
         return;
       }
       res.json(data);
@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
   })
     .then(data => {
       if(!data) {
-        res.status(404).json({message: 'No categories found'});
+        res.status(404).json({message: 'No categories found! Have you seeded your db?'});
         return;
       }
       res.json(data);
@@ -62,6 +62,22 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  Category.update(req.body, {
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(data => {
+    if (!data) {
+      res.status(404).json({message: "No category matches this ID."});
+      return;
+    }
+    res.json(data)
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  })
 });
 
 router.delete('/:id', (req, res) => {
