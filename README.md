@@ -88,6 +88,8 @@ Click to watch the full video on YouTube!
 ## Credits
 
   Ediubong Ekwere | JunoAndIce
+  jpd61
 
-  <https://github.com/JunoAndIce> | [ekwere.edi@gmail.com](mailto:ekwere.edi@gmail.com)
+  <https://github.com/JunoAndIce> | [ekwere.edi@gmail.com](mailto:ekwere.edi@gmail.com)\
+  <https://github.com/jpd61> | [jpd@dewoodyoil.com](mailto:jpd@dewoodyoil.com)
   
