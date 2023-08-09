@@ -19,6 +19,8 @@ A NodeJS and MySQL powered E-Commerce Back End. It utilizes several key npm tech
   
 ## Installation
   
+  You must have NodeJS and MySQL installed on your computer.
+
 - Clone the repo to your local storage.
 - Open the folder in a git bash or powershell terminal.
 - Run `npm i` to install the necessary packages.
