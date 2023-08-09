@@ -49,7 +49,7 @@ router.get('/:id', (req, res) => {
   })
     .then(products => {
       if (!products) {
-        res.status(404).json({message: 'No product found with this id'});
+        res.status(404).json({message: 'No products matches this ID. Have you seeded your db?'});
         return;
       }
       res.json(products);
@@ -74,7 +74,7 @@ router.post('/', (req, res) => {
       if (req.body.tagIds.length) {
         const tagIDArr = req.body.tagIds.map((tag_id) => {
           return {
-            product_id: product.id,
+            product_id: products.id,
             tag_id,
           };
         });
@@ -102,10 +102,11 @@ router.put('/:id', (req, res) => {
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
     })
-    .then((productTags) => {
-      // get list of current tag_ids
-      const currentTagIDs = productTags.map(({ tag_id }) => tag_id);
-      // create filtered list of new tag_ids
+    // 
+    .then((products) => {
+      // get list of current tag_ids and map out only their tag_id's
+      const currentTagIDs = products.map(({ tag_id }) => tag_id);
+      // create a new const that will be any tags that aren't already in the db
       const newTagIDs = req.body.tagIds
         .filter((tag_id) => !currentTagIDs.includes(tag_id))
         .map((tag_id) => {
@@ -114,18 +115,20 @@ router.put('/:id', (req, res) => {
             tag_id,
           };
         });
-      // Checks the 
-      const oldTagIDs = productTags
+      // Get a new const that will equal the id of the product tags
+      const oldTagIDs = products
         .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
         .map(({ id }) => id);
 
-      // run both actions
+      
       return Promise.all([
+        // Destroy all old product tags
         ProductTag.destroy({ where: { id: oldTagIDs } }),
+        // Create new Product tags
         ProductTag.bulkCreate(newTagIDs),
       ]);
     })
-    .then((updatedProductTags) => res.json(updatedProductTags))
+    .then((updatedProducts) => res.json(updatedProducts))
     .catch((err) => {
       // console.log(err);
       res.status(400).json(err);
@@ -134,6 +137,22 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  Product.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(products => {
+    if (!products) {
+      rs.status(404).json({message: 'No products matches this ID. Have you seeded your db?'});
+      return;
+    }
+    res.json(products);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 module.exports = router;
